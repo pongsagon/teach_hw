@@ -31,9 +31,9 @@ module tt_um_vga_example (
   // VGA signals
   wire hsync;
   wire vsync;
-  reg [1:0] R;
-  reg [1:0] G;
-  reg [1:0] B;
+  wire [1:0] R;
+  wire [1:0] G;
+  wire [1:0] B;
   wire video_active;
   wire [9:0] pix_x;
   wire [9:0] pix_y;
@@ -67,23 +67,23 @@ module tt_um_vga_example (
   end
 
   assign mem_index = (pix_y / MUL_FACTOR) * IMG_SIZE + pix_x / MUL_FACTOR;  
+  assign color = img[mem_index];
+  assign R = (video_active)? color[5:4]:0;
+  assign G = (video_active)? color[5:4]:0;
+  assign B = (video_active)? color[5:4]:0;
 
-  always @(posedge clk) begin
-     color <= mem[mem_index];
-  end
-
-  // RGB output logic
-  always @(posedge clk) begin
-    if (~rst_n) begin
-      R <= 0;
-      G <= 0;
-      B <= 0;
-    end else begin
-      R <= (video_active)? color[5:4]:0;
-      G <= (video_active)? color[3:2]:0;
-      B <= (video_active)? color[1:0]:0;
-    end
-  end
+  // // RGB output logic
+  // always @(posedge clk) begin
+  //   if (~rst_n) begin
+  //     R <= 0;
+  //     G <= 0;
+  //     B <= 0;
+  //   end else begin
+  //     R <= (video_active)? color[5:4]:0;
+  //     G <= (video_active)? color[3:2]:0;
+  //     B <= (video_active)? color[1:0]:0;
+  //   end
+  // end
 
 
 
