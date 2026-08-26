@@ -4,4 +4,4 @@
 # VGA Playground issue
 1. When using $readmemh:
    - cannot change the filename on the web after the first load.
-   - data that loaded from $readmemh must be used, if not used it will cause Invalid typed array length
+   - data that loaded from $readmemh must be used, if not used it will cause error: Invalid typed array length
