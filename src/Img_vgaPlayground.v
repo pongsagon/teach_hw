@@ -68,7 +68,9 @@ module tt_um_vga_example (
 
   assign mem_index = (pix_y / MUL_FACTOR) * IMG_SIZE + pix_x / MUL_FACTOR;  
 
-
+  always @(posedge clk) begin
+     color <= mem[mem_index];
+  end
 
   // RGB output logic
   always @(posedge clk) begin
