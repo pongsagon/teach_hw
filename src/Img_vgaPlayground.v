@@ -64,8 +64,8 @@ module tt_um_vga_example (
   reg [5:0] color;
 
   initial begin
-    $readmemh("color1.mem", img);
-    $readmemh("bg1.mem", img2);
+   $readmemh("../data/color1.mem", img);
+   $readmemh("../data/bg1.mem", img2);
   end
 
   always @(posedge clk)begin
