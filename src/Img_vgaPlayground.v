@@ -63,7 +63,7 @@ module tt_um_vga_example (
   wire [5:0] color;
 
   initial begin
-    $readmemh("../data/bg1.mem", img);
+    $readmemh("../data/color1.mem", img);
   end
 
   assign mem_index = (pix_y / MUL_FACTOR) * IMG_SIZE + pix_x / MUL_FACTOR;  
@@ -71,19 +71,6 @@ module tt_um_vga_example (
   assign R = (video_active)? color[5:4]:0;
   assign G = (video_active)? color[3:2]:0;
   assign B = (video_active)? color[1:0]:0;
-
-  // // RGB output logic
-  // always @(posedge clk) begin
-  //   if (~rst_n) begin
-  //     R <= 0;
-  //     G <= 0;
-  //     B <= 0;
-  //   end else begin
-  //     R <= (video_active)? color[5:4]:0;
-  //     G <= (video_active)? color[3:2]:0;
-  //     B <= (video_active)? color[1:0]:0;
-  //   end
-  // end
 
 
 
