@@ -11,10 +11,11 @@ To use:
 
 module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos);
 
-  input clk;
-  input reset;
-  output reg hsync, vsync;
-  output display_on;
+  input wire clk;
+  input wire reset;
+  output reg hsync;
+  output reg vsync;
+  output wire display_on;
   output reg [9:0] hpos;
   output reg [9:0] vpos;
 

@@ -69,7 +69,7 @@ module tt_um_vga_example (
   end
 
   assign mem_index = (pix_y / MUL_FACTOR) * IMG_SIZE + pix_x / MUL_FACTOR;  
-  assign color = img[mem_index]+img2[mem_index];
+  assign color = img2[mem_index];//+img2[mem_index];
   assign R = (video_active)? color[5:4]:0;
   assign G = (video_active)? color[3:2]:0;
   assign B = (video_active)? color[1:0]:0;
