@@ -61,15 +61,18 @@ module tt_um_vga_example (
   reg [5:0] img[76799:0];  // 320x240
   reg [5:0] img2[76799:0];  // 320x240
   wire [16:0] mem_index;
-  wire [5:0] color;
+  reg [5:0] color;
 
   initial begin
-    $readmemh("../data/color1.mem", img);
-    $readmemh("../data/bg1.mem", img2);
+    $readmemh("color1.mem", img);
+    $readmemh("bg1.mem", img2);
   end
 
+  always @(posedge clk)begin
+       color <= img[mem_index]+img2[mem_index];
+  end
   assign mem_index = (pix_y / MUL_FACTOR) * IMG_SIZE + pix_x / MUL_FACTOR;  
-  assign color = img2[mem_index];//+img2[mem_index];
+  //assign color = img[mem_index]+img2[mem_index];
   assign R = (video_active)? color[5:4]:0;
   assign G = (video_active)? color[3:2]:0;
   assign B = (video_active)? color[1:0]:0;
