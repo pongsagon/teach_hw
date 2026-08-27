@@ -1,5 +1,9 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
+# 1st Gen game console
+- link to students' works
+- can be played on vga-playground.com
+
 
 # VGA Playground issue
 1. When using $readmemh:
