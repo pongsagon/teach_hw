@@ -5,9 +5,8 @@
 - can be played on vga-playground.com: https://vga-playground.com/?repo=https://github.com/pongsagon/teach_hw
 - try each example by comment out a group of .v file of the other examples in info.yaml file
 1. Display image
-   - Img_vgaPlayground.v
-3. Text mode display
-4. Picture Processing Unit (PPU)
+2. Text mode display
+3. Picture Processing Unit (PPU)
 
 
 # 1st Gen game console
