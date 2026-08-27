@@ -1,0 +1,142 @@
+`timescale 1ns / 1ps
+
+// Reference book: "FPGA Prototyping by Verilog Examples"
+//                    "Xilinx Spartan-3 Version"
+// Authored by: Pong P. Chu
+// Published by: Wiley, 2008
+
+// Adapted for use on Basys 3 FPGA with Xilinx Artix-7
+// by: David J. Marion aka FPGA Dude
+
+// Modified by: Matt 3/11/2023
+//	- change the debounce module & dual port ram module
+//  - video_on -> video_off (blanking)
+// 27/09/2026
+//  - modify for running on vga-playground.com
+//  - use gamepad pmod for input
+//  - remove debounce module
+
+module text_screen_gen(
+    input wire clk, 
+    input wire reset,
+    input wire video_off,
+    input wire [11:0] gamepad_in,
+    input wire [9:0] x, 
+    input wire [9:0] y,
+    output reg [5:0] rgb
+    );
+    
+    // signal declaration
+    // ascii ROM
+    wire [10:0] rom_addr;
+    wire [6:0] char_addr;
+    wire [3:0] row_addr;
+    wire [2:0] bit_addr;
+    wire [7:0] font_word;
+    wire ascii_bit;
+
+    // tile RAM
+    wire we;                    // write enable
+    wire [11:0] addr_r, addr_w;
+    wire [6:0] din, dout;
+    // 80-by-30 tile map
+    parameter MAX_X = 80;   // 640 pixels / 8 data bits = 80
+    parameter MAX_Y = 30;   // 480 pixels / 16 data rows = 30
+
+    // cursor
+    reg [6:0] cur_x_reg;
+    wire [6:0] cur_x_next;
+    reg [4:0] cur_y_reg;
+    wire [4:0] cur_y_next;
+    wire move_xl_tick, move_yu_tick, move_xr_tick, move_yd_tick, cursor_on;
+    assign move_xl_tick = gamepad_in[5];
+    assign move_xr_tick = gamepad_in[4];
+    assign move_yu_tick = gamepad_in[7];
+    assign move_yd_tick = gamepad_in[6];
+
+
+    // delayed pixel count by 2clk
+    reg [9:0] pix_x1_reg, pix_y1_reg;
+    reg [9:0] pix_x2_reg, pix_y2_reg;
+    // object output signals
+    wire [5:0] text_rgb, text_rev_rgb;
+    
+    // body
+    // instantiate debounce for four buttons
+	// debouncer db_left(.clk(clk),.PB(left),.PB_state(),.PB_down(move_xl_tick),.PB_up());
+	// debouncer db_up(.clk(clk),.PB(up),.PB_state(),.PB_down(move_yu_tick),.PB_up());
+	// debouncer db_down(.clk(clk),.PB(down),.PB_state(),.PB_down(move_yd_tick),.PB_up());
+	// debouncer db_right(.clk(clk),.PB(right),.PB_state(),.PB_down(move_xr_tick),.PB_up());
+	
+    // instantiate the ascii / font rom, 1% of BRAM on Basys3
+    ascii_rom a_rom(.clk(clk), .addr(rom_addr), .data(font_word));
+    // instantiate dual-port video RAM (2^12-by-7), 2% of BRAM on Basys3
+	simpledpmem #(.DATA_SIZE(7), .ADDR_SIZE(12)) 
+    dp_ram(.clk(clk),.reset(),.dat_in(din),.wr_adr(addr_w),.wr_en(we),.dat_out(dout),.rd_adr(addr_r));
+    
+    // registers
+    always @(posedge clk or posedge reset)
+        if(reset) begin
+            cur_x_reg <= 0;
+            cur_y_reg <= 0;
+            pix_x1_reg <= 0;
+            pix_x2_reg <= 0;
+            pix_y1_reg <= 0;
+            pix_y2_reg <= 0;
+        end    
+        else begin
+            cur_x_reg <= cur_x_next;
+            cur_y_reg <= cur_y_next;
+            pix_x1_reg <= x;
+            pix_x2_reg <= pix_x1_reg;
+            pix_y1_reg <= y;
+            pix_y2_reg <= pix_y1_reg;
+        end
+		
+
+    // tile RAM write
+    assign addr_w = {cur_y_reg, cur_x_reg};
+    assign we = gamepad_in[6];
+    assign din = 7'd1;
+
+    // tile RAM read
+    // use nondelayed coordinates to form tile RAM address
+    assign addr_r = {y[8:4], x[9:3]};
+    assign char_addr = dout;
+    // font ROM
+    assign row_addr = y[3:0];
+    assign rom_addr = {char_addr, row_addr};
+    // use delayed coordinate to select a bit
+    assign bit_addr = pix_x2_reg[2:0];
+    assign ascii_bit = font_word[~bit_addr];
+
+    // new cursor position
+    assign cur_x_next = (move_xr_tick && (cur_x_reg == MAX_X - 1)) || (move_xl_tick && (cur_x_reg == 0)) ? 0 :    
+                        (move_xr_tick) ? cur_x_reg + 1 :    // move right
+                        (move_xl_tick) ? cur_x_reg - 1 :    // move left
+                        cur_x_reg;                          // no move
+                                           
+    assign cur_y_next = (move_yu_tick && (cur_y_reg == 0)) || (move_yd_tick && (cur_y_reg == MAX_Y - 1)) ? 0 :    
+                        (move_yu_tick) ? cur_y_reg - 1 :    // move up                        
+                        (move_yd_tick) ? cur_y_reg + 1 :    // move down
+                        cur_y_reg;                          // no move           
+    
+    // object signals
+    // green over black and reversed video for cursor
+    assign text_rgb = (ascii_bit) ? 6'b001100 : 6'b0;
+    assign text_rev_rgb = (ascii_bit) ? 6'b0 : 6'b001100;
+    // use delayed coordinates for comparison
+    assign cursor_on = (pix_y2_reg[8:4] == cur_y_reg) &&
+                       (pix_x2_reg[9:3] == cur_x_reg);
+
+    // rgb multiplexing circuit
+    always @(*)
+        if(video_off)
+            rgb = 6'b0;     // blank
+        else
+            if(cursor_on)
+                rgb = text_rev_rgb;
+            else
+                rgb = text_rgb;
+      
+endmodule
