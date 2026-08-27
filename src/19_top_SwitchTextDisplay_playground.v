@@ -65,7 +65,7 @@ module tt_um_vga_example(
       .r(inp_r)
     );
 
-    reg [5:0] color;
+    wire [5:0] color;
 
     // instantiate text generation circuit
     text_screen_gen tsg(.clk(clk), .reset(~rst_n), .video_off(~video_active), 
