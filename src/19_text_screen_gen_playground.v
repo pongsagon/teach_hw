@@ -49,10 +49,6 @@ module text_screen_gen(
     reg [4:0] cur_y_reg;
     wire [4:0] cur_y_next;
     wire move_xl_tick, move_yu_tick, move_xr_tick, move_yd_tick, cursor_on;
-    assign move_xl_tick = gamepad_in[5];
-    assign move_xr_tick = gamepad_in[4];
-    assign move_yu_tick = gamepad_in[7];
-    assign move_yd_tick = gamepad_in[6];
 
 
     // delayed pixel count by 2clk
@@ -63,10 +59,10 @@ module text_screen_gen(
     
     // body
     // instantiate debounce for four buttons
-	// debouncer db_left(.clk(clk),.PB(left),.PB_state(),.PB_down(move_xl_tick),.PB_up());
-	// debouncer db_up(.clk(clk),.PB(up),.PB_state(),.PB_down(move_yu_tick),.PB_up());
-	// debouncer db_down(.clk(clk),.PB(down),.PB_state(),.PB_down(move_yd_tick),.PB_up());
-	// debouncer db_right(.clk(clk),.PB(right),.PB_state(),.PB_down(move_xr_tick),.PB_up());
+	debouncer db_left(.clk(clk),.PB(gamepad_in[5]),.PB_state(),.PB_down(move_xl_tick),.PB_up());
+	debouncer db_up(.clk(clk),.PB(gamepad_in[7]),.PB_state(),.PB_down(move_yu_tick),.PB_up());
+	debouncer db_down(.clk(clk),.PB(gamepad_in[6]),.PB_state(),.PB_down(move_yd_tick),.PB_up());
+	debouncer db_right(.clk(clk),.PB(gamepad_in[4]),.PB_state(),.PB_down(move_xr_tick),.PB_up());
 	
     // instantiate the ascii / font rom, 1% of BRAM on Basys3
     ascii_rom a_rom(.clk(clk), .addr(rom_addr), .data(font_word));
@@ -96,7 +92,7 @@ module text_screen_gen(
 
     // tile RAM write
     assign addr_w = {cur_y_reg, cur_x_reg};
-    assign we = gamepad_in[6];
+    assign we = gamepad_in[11];
     assign din = 7'd1;
 
     // tile RAM read
