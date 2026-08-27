@@ -17,8 +17,15 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "Img_vgaPlayground.v"
     - "hsync_generator.v"
+    # 1. Display image
+    #- "Img_vgaPlayground.v"
+    # 2. Text mode
+    - "19_top_SwitchTextDisplay_playground.v"
+    - "19_text_screen_gen_playground.v"
+    - "19_ascii_rom_playground.v"
+    - "13_simpledualportMem.v"
+    - "gamepad_pmod.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
