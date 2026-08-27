@@ -26,6 +26,7 @@ project:
     - "19_ascii_rom_playground.v"
     - "13_simpledualportMem.v"
     - "gamepad_pmod.v"
+    - "10_debounce.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
