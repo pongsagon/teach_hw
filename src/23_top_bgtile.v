@@ -45,15 +45,36 @@ module tt_um_vga_example (
 	
 	wire [7:0] tile;
 	wire [5:0] color;
-
-	reg [9:0] scrollOffset = 0;
+	reg [9:0] scrollOffset;
 	wire [10:0] x_scroll;
 
 	assign x_scroll = pix_x + scrollOffset;
 	
 	map_rom map_rom1(.clk(clk),.x_scroll(x_scroll[10:4]),.y(pix_y),.tile(tile));
 
-	bg_rom bg_rom1(.clk(clk),.tile(tile),.offsetX(x_scroll[3:0]),.offsetY(pix_y[3:0]),.color(color));
+	bg_rom bg_rom1(.clk(clk),.tile(tile),.offsetX(pix_x1_reg[3:0]),.offsetY(pix_y1_reg[3:0]),.color(color));
+
+
+	// delayed pixel count by 2clk
+    reg [9:0] pix_x1_reg, pix_y1_reg;
+    reg [9:0] pix_x2_reg, pix_y2_reg;
+	
+	always @(posedge clk) begin
+		if(reset)begin
+			scrollOffset <= 0;
+			pix_x1_reg <= 0;
+            pix_x2_reg <= 0;
+            pix_y1_reg <= 0;
+            pix_y2_reg <= 0;
+		end
+		else begin
+			pix_x1_reg <= x_scroll;
+            pix_x2_reg <= pix_x1_reg;
+            pix_y1_reg <= pix_y;
+            pix_y2_reg <= pix_y1_reg;
+		end
+	
+	end
 
 	// handle input for scrolling, do oncex4 per frame
 	always @(posedge vsync) begin
