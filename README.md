@@ -22,3 +22,4 @@
 1. When using $readmemh:
    - cannot change the filename on the web after the first load.
    - data that loaded from $readmemh must be used, if not used it will cause error: Invalid typed array length
+2. vga-playground may take a while to load a new update source from git
