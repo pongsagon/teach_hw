@@ -54,7 +54,7 @@ module tt_um_vga_example (
 
 	// delayed pixel count
     reg [9:0] pix_x1_reg;
-    reg [9:0] pix_x2_reg;
+    reg [9:0] pix_y1_reg;
 	always @(posedge clk) begin
 		if(!rst_n)begin
 			scrollOffset <= 0;
