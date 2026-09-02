@@ -47,7 +47,7 @@ module tt_um_vga_example (
 
 	// wire color
 	wire [10:0] x_scroll;
-	wire [11:0] bg_color;
+	wire [5:0] bg_color;
 	wire [5:0] mario_color;
 	wire [5:0] sprites_color;
 	reg [5:0] final_color;
