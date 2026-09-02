@@ -27,10 +27,18 @@ project:
     #- "13_simpledualportMem.v"
     #- "gamepad_pmod.v"
     #- "10_debounce.v"
-    # 3. PPU
-    - "23_bg_rom.v"
-    - "23_map_rom.v"
-    - "23_top_bgtile.v"
+    # 3. Background Tile
+    #- "23_bg_rom.v"
+    #- "23_map_rom.v"
+    #- "23_top_bgtile.v"
+    # 4. PPU
+    - "bg_renderer.v"
+    - "mario_renderer.v"
+    - "top_mario.v"
+    - "mario_rom.v"
+    - "RAM.v"
+    - "RAM2.v"
+    - "map_rom.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
