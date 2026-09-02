@@ -78,11 +78,11 @@ module tt_um_vga_example (
 	reg debug_state = 0;
 
 
-	assign x_scroll = x + scrollOffset;
+	assign x_scroll = pix_x + scrollOffset;
 	
-	bg_renderer bg_renderer1(.clk(clk),.reset(~rst_n),.x_scroll(x_scroll),.y(y),.color(bg_color));
+	bg_renderer bg_renderer1(.clk(clk),.reset(~rst_n),.x_scroll(x_scroll),.y(pix_y),.color(bg_color));
 
-	mario_renderer mario1(.clk(clk),.reset(~rst_n),.state(mario_state),.anim(mario_anim[2]),.posX(mario_posX),.posY(mario_posY),.x_scroll(x_scroll),.y(y),.color(mario_color));
+	mario_renderer mario1(.clk(clk),.reset(~rst_n),.state(mario_state),.anim(mario_anim[2]),.posX(mario_posX),.posY(mario_posY),.x_scroll(x_scroll),.y(pix_y),.color(mario_color));
 
 	RAM topRAM(.clk(clk),.dat_in(RAM_dat_in),.wr_adr(RAM_wadd),.wr_en(RAM_we),.dat_out(RAM_dat_out),.rd_adr(RAM_radd));
 	

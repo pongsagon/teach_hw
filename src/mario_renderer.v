@@ -25,7 +25,7 @@ module mario_renderer(
 	wire [1:0] tile;
 
 
-	assign assign offsetX = (state[2]) ? 31 - (x_scroll - posX) : x_scroll - posX;        // (state[2])? for flipped sprite
+	assign offsetX = (state[2]) ? 31 - (x_scroll - posX) : x_scroll - posX;        // (state[2])? for flipped sprite
 	assign offsetY = y - posY;
 	assign tile = (state[1:0] == 3)? 3 : (state[1:0] == 0) ? 0 : 1 + anim;
 
