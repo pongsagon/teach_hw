@@ -4,7 +4,7 @@
 - examples of Verilog projects and students' works on my 2026 Graphics Hardware course
 
 ## Examples code
-- can be played on vga-playground.com: https://vga-playground.com/?repo=https://github.com/celestialyra-snake/teach_hw
+- can be played on vga-playground.com: https://vga-playground.com/?repo=https://github.com/celestialyra/teach_hw
 - vga-playground will read verilog file to load from info.yaml.
 - This repo contain many example projects, try each example by commentting out a group of .v file of the other examples in info.yaml file
 1. Display image
