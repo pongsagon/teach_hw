@@ -25,7 +25,7 @@ project:
     #- "19_text_screen_gen_playground.v"
     #- "19_ascii_rom_playground.v"
     #- "13_simpledualportMem.v"
-    "gamepad_pmod.v"
+    - "gamepad_pmod.v"
     #- "10_debounce.v" 
     # 3. Background Tile
     #- "23_bg_rom.v"
